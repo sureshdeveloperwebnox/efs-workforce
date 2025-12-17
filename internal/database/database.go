@@ -5,7 +5,8 @@ import (
 	"log"
 	"time"
 
-	"example-service/internal/domain"
+	"efs-workforce/internal/domain"
+
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -22,6 +23,7 @@ func InitGORM(connectionURL string) (*gorm.DB, error) {
 		NowFunc: func() time.Time {
 			return time.Now().UTC()
 		},
+		DisableForeignKeyConstraintWhenMigrating: true, // Disable FK constraints during migration
 	})
 	if err != nil {
 		return nil, fmt.Errorf("failed to connect to database: %w", err)
@@ -49,10 +51,17 @@ func InitGORM(connectionURL string) (*gorm.DB, error) {
 
 // AutoMigrate runs GORM auto migrations
 func AutoMigrate(db *gorm.DB) error {
-	// Auto migrate all models
+	// Migrate all tables (FK constraints are disabled in config)
 	err := db.AutoMigrate(
-		&domain.Example{},
-		// Add more domain entities here as needed
+		&domain.Role{},
+		&domain.Equipment{},
+		&domain.Attendance{},
+		&domain.TimeOff{},
+		&domain.Trip{},
+		&domain.Crew{},
+		&domain.User{},
+		&domain.CrewMember{},
+		&domain.Permission{},
 	)
 	if err != nil {
 		return fmt.Errorf("failed to auto migrate: %w", err)
@@ -61,4 +70,3 @@ func AutoMigrate(db *gorm.DB) error {
 	log.Println("Database migrations completed successfully")
 	return nil
 }
-

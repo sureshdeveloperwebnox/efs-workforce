@@ -1,11 +1,11 @@
 package application
 
 import (
-	"example-service/internal/application/dto"
-	"example-service/internal/domain"
-	"example-service/internal/ports/external"
-	"example-service/internal/ports/repositories"
-	"example-service/internal/ports/services"
+	"efs-workforce/internal/application/dto"
+	"efs-workforce/internal/domain"
+	"efs-workforce/internal/ports/external"
+	"efs-workforce/internal/ports/repositories"
+	"efs-workforce/internal/ports/services"
 	"fmt"
 	"time"
 )

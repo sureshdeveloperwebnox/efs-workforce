@@ -1,10 +1,10 @@
 package grpc
 
 import (
-	"example-service/internal/application/dto"
-	"example-service/internal/domain"
-	"example-service/internal/ports/services"
-	proto "example-service/example-service/proto"
+	"efs-workforce/internal/application/dto"
+	"efs-workforce/internal/domain"
+	"efs-workforce/internal/ports/services"
+	proto "efs-workforce/proto"
 	"context"
 
 	"google.golang.org/grpc/codes"

@@ -3,6 +3,7 @@ package config
 import (
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/joho/godotenv"
@@ -18,6 +19,8 @@ type Config struct {
 	RefreshTokenExpiry time.Duration
 	GRPCPort           string
 	HTTPPort           string
+	KafkaBrokers       []string
+	KafkaTopicPrefix   string
 }
 
 // Load loads configuration from environment variables
@@ -31,15 +34,32 @@ func Load() (*Config, error) {
 	accessTokenExpiry := time.Duration(accessExpiry) * time.Second
 	refreshTokenExpiry := time.Duration(refreshExpiry) * time.Second
 
+	kafkaBrokersStr := getEnv("KAFKA_BROKERS", "localhost:9092")
+	var kafkaBrokers []string
+	if kafkaBrokersStr != "" {
+		// Split by comma if multiple brokers
+		brokers := strings.Split(kafkaBrokersStr, ",")
+		for _, broker := range brokers {
+			if trimmed := strings.TrimSpace(broker); trimmed != "" {
+				kafkaBrokers = append(kafkaBrokers, trimmed)
+			}
+		}
+	}
+	if len(kafkaBrokers) == 0 {
+		kafkaBrokers = []string{"localhost:9092"} // Default
+	}
+
 	return &Config{
 		DatabaseURL:        getEnv("DATABASE_URL", ""),
 		RedisURL:           getEnv("REDIS_URL", "localhost:6379"),
 		RedisPassword:      getEnv("REDIS_PASSWORD", ""),
-		GRPCPort:           getEnv("GRPC_PORT", "50051"),
-		HTTPPort:           getEnv("HTTP_PORT", "8081"),
+		GRPCPort:           getEnv("GRPC_PORT", "50056"),
+		HTTPPort:           getEnv("HTTP_PORT", "8082"),
 		JWTSecret:          getEnv("JWT_SECRET", "your-secret-key"),
 		AccessTokenExpiry:  accessTokenExpiry,
 		RefreshTokenExpiry: refreshTokenExpiry,
+		KafkaBrokers:       kafkaBrokers,
+		KafkaTopicPrefix:   getEnv("KAFKA_TOPIC_PREFIX", "workforce"),
 	}, nil
 }
 
@@ -49,4 +69,3 @@ func getEnv(key, defaultValue string) string {
 	}
 	return defaultValue
 }
-

@@ -1,7 +1,7 @@
 package postgres
 
 import (
-	"example-service/internal/domain"
+	"efs-workforce/internal/domain"
 	"gorm.io/gorm"
 )
 

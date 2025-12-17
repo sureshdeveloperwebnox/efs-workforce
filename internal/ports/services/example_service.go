@@ -1,6 +1,6 @@
 package services
 
-import "example-service/internal/application/dto"
+import "efs-workforce/internal/application/dto"
 
 // ExampleService defines the interface for example business operations
 type ExampleService interface {

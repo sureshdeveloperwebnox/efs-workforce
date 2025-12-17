@@ -1,7 +1,7 @@
 package unit
 
 import (
-	"example-service/internal/domain"
+	"efs-workforce/internal/domain"
 	"testing"
 )
 
